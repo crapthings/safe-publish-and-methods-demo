@@ -1,6 +1,6 @@
 Package.describe({
   name: 'crapthings:safe-publish-and-methods',
-  summary: 'server side publish and methods protected by login and custom rules',
+  summary: 'require login to use publications and methods',
   version: '0.0.1',
   git: 'https://github.com/crapthings/safe-publish-and-methods'
 })
