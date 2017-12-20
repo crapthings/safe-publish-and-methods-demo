@@ -1,7 +1,3 @@
-const CONFIG = {
-  unblockPublish: true,
-}
-
 Meteor.safeMethods = function (methods) {
   const _methods = {}
 
@@ -10,9 +6,6 @@ Meteor.safeMethods = function (methods) {
       if (!this.userId)
         throw new Meteor.Error('unauthorized-method', 'The user must be logged in to invoke method')
 
-      const rules = Meteor.safeMethods.rules
-      rules && rules[methodName] && rules[methodName].apply(this, arguments)
-
       return method.apply(this, arguments)
     }
   })
@@ -20,15 +13,12 @@ Meteor.safeMethods = function (methods) {
   Meteor.methods(_methods)
 }
 
-Meteor.safePublish = function (name, func) {
+Meteor.safePublish = function (name, func, unblock = true) {
   Meteor.publish(name, function () {
     if (!this.userId)
       throw new Meteor.Error('unauthorized-publication', 'The user must be logged in to subscribe publication')
 
-    CONFIG.unblockPublish && this.unblock && this.unblock()
-
-    const rules = Meteor.safePublish.rules
-    rules && rules[name] && rules[name].apply(this, arguments)
+    unblock && this.unblock && this.unblock()
 
     return func.apply(this, arguments)
   })
